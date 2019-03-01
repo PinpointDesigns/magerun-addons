@@ -105,6 +105,9 @@ class DeltaUpdateChangelogCommand extends AbstractMagentoCommand
         $m2DbObject = $m1DbResource->getConnection('m2db_write');
 
         $tables = $this->getClTableList();
+        if (\Mage::getEdition() == \Mage::EDITION_ENTERPRISE) {
+            $tables = array_merge($tables, $this->getClEnterpriseTableList());
+        }
 
         foreach ($tables as $table) {
             // If no specific m2name is set, name is thesame as M1
@@ -462,7 +465,254 @@ class DeltaUpdateChangelogCommand extends AbstractMagentoCommand
 	         'name' => 'wishlist_item_option',
 	         'id' => 'option_id',
 	         'destination' => 'm2_cl_wishlist_item_option'
-	     )
+	     ),
+        array(
+            'name' => 'sales_flat_shipment_comment',
+            'm2name' => 'sales_shipment_comment',
+            'id' => 'entity_id',
+            'destination' => 'm2_cl_sales_flat_shipment_comment'
+        ),
+
+        array(
+            'name' => 'sales_payment_transaction',
+            'id' => 'transaction_id',
+            'destination' => 'm2_cl_sales_payment_transaction'
+        ),
+
+        array(
+            'name' => 'paypal_payment_transaction',
+            'id' => 'transaction_id',
+            'destination' => 'm2_cl_paypal_payment_transaction'
+        ),
+        );
+
+        return $tables;
+    }
+
+    private function getClEnterpriseTableList()
+    {
+        $tables = array(
+            array(
+                'name' => 'enterprise_customer_sales_flat_order',
+                'm2name' => 'magento_customercustomattributes_sales_flat_order',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_customer_sales_flat_order'
+            ),
+            array(
+                'name' => 'enterprise_customer_sales_flat_order_address',
+                'm2name' => 'magento_customercustomattributes_sales_flat_order_address',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_customer_sales_flat_order_address'
+            ),
+            array(
+                'name' => 'enterprise_customer_sales_flat_quote',
+                'm2name' => 'magento_customercustomattributes_sales_flat_quote',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_customer_sales_flat_quote'
+            ),
+            array(
+                'name' => 'enterprise_customer_sales_flat_quote_address',
+                'm2name' => 'magento_customercustomattributes_sales_flat_quote_address',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_customer_sales_flat_quote_address'
+            ),
+
+            array(
+                'name' => 'enterprise_customerbalance',
+                'm2name' => 'magento_customerbalance',
+                'id' => 'balance_id',
+                'destination' => 'm2_cl_enterprise_customerbalance'
+            ),
+
+            array(
+                'name' => 'enterprise_customerbalance_history',
+                'm2name' => 'magento_customerbalance_history',
+                'id' => 'history_id',
+                'destination' => 'm2_cl_enterprise_customerbalance_history'
+            ),
+
+            array(
+                'name' => 'enterprise_customersegment_customer',
+                'm2name' => 'magento_customersegment_customer',
+                'id' => 'segment_id',
+                'destination' => 'm2_cl_enterprise_customersegment_customer'
+            ),
+
+            array(
+                'name' => 'enterprise_giftcardaccount_history',
+                'm2name' => 'magento_giftcardaccount_history',
+                'id' => 'history_id',
+                'destination' => 'm2_cl_enterprise_giftcardaccount_history'
+            ),
+
+
+            array(
+                'name' => 'enterprise_giftregistry_data',
+                'm2name' => 'magento_giftregistry_data',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_giftregistry_data'
+            ),
+
+            array(
+                'name' => 'enterprise_giftregistry_entity',
+                'm2name' => 'magento_giftregistry_entity',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_giftregistry_entity'
+            ),
+
+            array(
+                'name' => 'enterprise_giftregistry_item',
+                'm2name' => 'magento_giftregistry_item',
+                'id' => 'item_id',
+                'destination' => 'm2_cl_enterprise_giftregistry_item'
+            ),
+
+            array(
+                'name' => 'enterprise_giftregistry_item_option',
+                'm2name' => 'magento_giftregistry_item_option',
+                'id' => 'option_id',
+                'destination' => 'm2_cl_enterprise_giftregistry_item_option'
+            ),
+
+            array(
+                'name' => 'enterprise_giftregistry_person',
+                'm2name' => 'magento_giftregistry_person',
+                'id' => 'person_id',
+                'destination' => 'm2_cl_enterprise_giftregistry_person'
+            ),
+
+            array(
+                'name' => 'enterprise_invitation',
+                'm2name' => 'magento_invitation',
+                'id' => 'invitation_id',
+                'destination' => 'm2_cl_enterprise_invitation'
+            ),
+
+            array(
+                'name' => 'enterprise_invitation_status_history',
+                'm2name' => 'magento_invitation_status_history',
+                'id' => 'history_id',
+                'destination' => 'm2_cl_enterprise_invitation_status_history'
+            ),
+
+            array(
+                'name' => 'enterprise_invitation_track',
+                'm2name' => 'magento_invitation_track',
+                'id' => 'track_id',
+                'destination' => 'm2_cl_enterprise_invitation_track'
+            ),
+
+            array(
+                'name' => 'enterprise_invitation_track',
+                'm2name' => 'magento_invitation_track',
+                'id' => 'track_id',
+                'destination' => 'm2_cl_enterprise_invitation_track'
+            ),
+
+            array(
+                'name' => 'enterprise_logging_event',
+                'm2name' => 'magento_logging_event',
+                'id' => 'log_id',
+                'destination' => 'm2_cl_enterprise_logging_event'
+            ),
+
+            array(
+                'name' => 'enterprise_logging_event_changes',
+                'm2name' => 'magento_logging_event_changes',
+                'id' => 'id',
+                'destination' => 'm2_cl_enterprise_logging_event_changes'
+            ),
+
+            array(
+                'name' => 'enterprise_reward',
+                'm2name' => 'magento_reward',
+                'id' => 'reward_id',
+                'destination' => 'm2_cl_enterprise_reward'
+            ),
+
+            array(
+                'name' => 'enterprise_reward_history',
+                'm2name' => 'magento_reward_history',
+                'id' => 'history_id',
+                'destination' => 'm2_cl_enterprise_reward_history'
+            ),
+
+            array(
+                'name' => 'enterprise_rma',
+                'm2name' => 'magento_rma',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_rma'
+            ),
+
+            array(
+                'name' => 'enterprise_rma_grid',
+                'm2name' => 'magento_rma_grid',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_rma_grid'
+            ),
+
+            array(
+                'name' => 'enterprise_rma_item_entity',
+                'm2name' => 'magento_rma_item_entity',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_rma_item_entity'
+            ),
+
+            array(
+                'name' => 'enterprise_rma_item_entity_int',
+                'm2name' => 'magento_rma_item_entity_int',
+                'id' => 'value_id',
+                'destination' => 'm2_cl_enterprise_rma_item_entity_int'
+            ),
+
+            array(
+                'name' => 'enterprise_rma_item_entity_varchar',
+                'm2name' => 'magento_rma_item_entity_varchar',
+                'id' => 'value_id',
+                'destination' => 'm2_cl_enterprise_rma_item_entity_varchar'
+            ),
+
+            array(
+                'name' => 'enterprise_rma_status_history',
+                'm2name' => 'magento_rma_status_history',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_rma_status_history'
+            ),
+
+            array(
+                'name' => 'enterprise_targetrule_index',
+                'm2name' => 'magento_targetrule_index',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_targetrule_index'
+            ),
+
+            array(
+                'name' => 'enterprise_sales_creditmemo_grid_archive',
+                'm2name' => 'magento_sales_creditmemo_grid_archive',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_sales_creditmemo_grid_archive'
+            ),
+
+            array(
+                'name' => 'enterprise_sales_invoice_grid_archive',
+                'm2name' => 'magento_sales_invoice_grid_archive',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_sales_invoice_grid_archive'
+            ),
+
+            array(
+                'name' => 'enterprise_sales_order_grid_archive',
+                'm2name' => 'magento_sales_order_grid_archive',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_sales_order_grid_archive'
+            ),
+
+            array(
+                'name' => 'enterprise_sales_shipment_grid_archive',
+                'm2name' => 'magento_sales_shipment_grid_archive',
+                'id' => 'entity_id',
+                'destination' => 'm2_cl_enterprise_sales_shipment_grid_archive'
+            ),
         );
 
         return $tables;
