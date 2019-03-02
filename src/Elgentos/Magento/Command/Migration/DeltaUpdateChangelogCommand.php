@@ -31,6 +31,8 @@ class DeltaUpdateChangelogCommand extends AbstractMagentoCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit','1536M');
+
         $this->detectMagento($output);
         if (!$this->initMagento()) return;
 
@@ -136,20 +138,15 @@ class DeltaUpdateChangelogCommand extends AbstractMagentoCommand
             $operationExpr = new \Zend_Db_Expr('"INSERT" as operation');
             $newRowsQuery = $m1DbObject->select()->from($table['name'], array($table['id'], $operationExpr));
 
-            if (count($existingRows)) {
+            if (count($existingRows) && $table['id'] !== 'entity_store_id') {
                 $newRowsQuery->where($table['id'] . ' NOT IN (' . implode(',', $existingRows) . ')');
             }
 
-            $newRows =$m1DbObject->fetchCol($newRowsQuery);
+            // Then, insert rows into the CL tables
+            $fields = array($table['id'], 'operation');
+            $newRows = $m1DbObject->insertBatchFromSelect($newRowsQuery, $table['destination'], $fields, Mysql::INSERT_IGNORE);
+            $output->writeln('<info>' . $newRows . ' entities were found for ' . $table['name'] . '</info>');
 
-            if (count($newRows)) {
-                $output->writeln('<info>' . count($newRows) . ' entities were found for ' . $table['name'] . '</info>');
-                // Then, insert rows into the CL tables
-                $fields = array($table['id'], 'operation');
-                $m1DbObject->insertBatchFromSelect($newRowsQuery, $table['destination'], $fields, Mysql::INSERT_IGNORE);
-            } else {
-                $output->writeln('<info>No new entities found for ' . $table['name'] . '</info>');
-            }
         }
     }
 
